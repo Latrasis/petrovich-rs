@@ -1,0 +1,6 @@
+# RUST
+target
+Cargo.lock
+
+# OSX
+.DS_Store
