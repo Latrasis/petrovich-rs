@@ -1,13 +1,13 @@
 
 
-struct Petrovich {
+struct Person {
 	gender: Gender
 }
 
-impl Petrovich {
+impl Person {
 
-	fn new(gender: Gender) -> Petrovich {
-        Petrovich {
+	fn new(gender: Gender) -> Person {
+        Person {
 			gender: gender
 		}
 	}
@@ -25,7 +25,7 @@ enum Gender {
 #[test]
 fn example_test(){
 
-    let male = Petrovich::new(Gender::Male);
+    let male = Person::new(Gender::Male);
     assert!(male.gender == Gender::Female);
 }
 
