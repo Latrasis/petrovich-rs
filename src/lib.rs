@@ -1,5 +1,4 @@
 
-
 struct Person {
 	gender: Gender
 }
@@ -11,6 +10,10 @@ impl Person {
 			gender: gender
 		}
 	}
+
+	// fn last_name(self, word: &str, case: Case) -> String {}
+	// fn first_name(self, word: &str, case: Case) -> String {}
+	// fn middle_name(self, word: &str,case: Case) -> String {}
 }
 
 // Predefined Genders
@@ -22,14 +25,20 @@ enum Gender {
 	Androgyenous
 }
 
-#[test]
-fn example_test(){
+// Predefined Cases
 
-    let male = Person::new(Gender::Male);
-    assert!(male.gender == Gender::Female);
+#[derive(PartialEq)]
+enum Case {
+	Genitive,
+	Dative,
+	Accusative,
+	Instrumental,
+	Prepositional,
 }
 
 #[test]
-fn it_works() {
-	println!("{:?}", "Hello World!");
+fn should_create_person(){
+
+    let male = Person::new(Gender::Male);
+    assert!(male.gender == Gender::Male);
 }
