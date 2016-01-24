@@ -4,3 +4,4 @@ version = "0.1.0"
 authors = ["road21 <amtroitskiy@gmail.com>"]
 
 [dependencies]
+yaml-rust = "0.3.0"
