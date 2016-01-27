@@ -26,31 +26,20 @@ impl Petrovich {
     }
 
     // TODO
-    fn last_name(&self, person: &Person, word: &str, case: Case) -> String {
+    fn last_name(&self, gender: Gender, word: &str, case: Case) -> String {
         String::from(word)
     }
     // TODO
-    fn first_name(&self, person: &Person, word: &str, case: Case) -> String {
+    fn first_name(&self, gender: Gender, word: &str, case: Case) -> String {
         String::from(word)
     }
     // TODO
-    fn middle_name(&self, person: &Person, word: &str, case: Case) -> String {
+    fn middle_name(&self, gender: Gender, word: &str, case: Case) -> String {
         String::from(word)
-    }
-}
-
-struct Person {
-    gender: Gender,
-}
-
-impl Person {
-    fn new(gender: Gender) -> Person {
-        Person { gender: gender }
     }
 }
 
 // Predefined Genders
-
 #[derive(PartialEq)]
 enum Gender {
     Male,
@@ -59,7 +48,6 @@ enum Gender {
 }
 
 // Predefined Cases
-
 #[derive(PartialEq)]
 enum Case {
     Genitive,
@@ -70,25 +58,23 @@ enum Case {
 }
 
 #[test]
-fn should_create_person() {
-    let male = Person::new(Gender::Male);
-    assert!(male.gender == Gender::Male);
+fn should_initialize() {
+    let factory = Petrovich::new();
 }
 
 #[test]
-fn should_case_name() {
+fn should_parse_name() {
     let factory = Petrovich::new();
-    let male = &Person::new(Gender::Male);
 
     assert_eq!("Лёша",
-               factory.first_name(male, "Лёша", Case::Genitive));
+               factory.first_name(Gender::Male, "Лёша", Case::Genitive));
     assert_eq!("Лёше",
-               factory.first_name(male, "Лёша", Case::Dative));
+               factory.first_name(Gender::Male, "Лёша", Case::Dative));
     assert_eq!("Лёшу",
-               factory.first_name(male, "Лёша", Case::Accusative));
+               factory.first_name(Gender::Male, "Лёша", Case::Accusative));
     assert_eq!("Лёшой",
-               factory.first_name(male, "Лёша", Case::Instrumental));
+               factory.first_name(Gender::Male, "Лёша", Case::Instrumental));
     assert_eq!("Лёше",
-               factory.first_name(male, "Лёша", Case::Prepositional));
+               factory.first_name(Gender::Male, "Лёша", Case::Prepositional));
 
 }
