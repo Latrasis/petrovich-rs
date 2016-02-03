@@ -6,10 +6,12 @@ use yaml_rust::{Yaml, YamlLoader};
 
 // Initializes, Stores and applies Rules
 struct Petrovich {
-    rules: Vec<Yaml>,
+    middlename: Yaml,
+    firstname: Yaml,
+    lastname: Yaml
 }
 
-impl Petrovich {
+impl  Petrovich {
 
     fn new() -> Petrovich {
 
@@ -19,18 +21,26 @@ impl Petrovich {
         let mut buffer = String::new();
         f.read_to_string(&mut buffer).unwrap();
         // Pass Buffer to Yaml and unwrap
-        let data = YamlLoader::load_from_str(&buffer).unwrap();
+        let rules: &Yaml = &YamlLoader::load_from_str(&buffer).unwrap()[0];
 
         // Return Petrovich with preloaded rules
-        Petrovich { rules: data }
+        Petrovich { 
+            middlename: rules["middlename"],
+            firstname: rules["firstname"],
+            lastname: rules["lastname"]
+        }
     }
 
     // TODO
-    fn last_name(&self, gender: Gender, word: &str, case: Case) -> String {
+    fn first_name(&self, gender: Gender, word: &str, case: Case) -> String {
+        let ref firstname_rulesets = self.firstname;
+
         String::from(word)
+
+
     }
     // TODO
-    fn first_name(&self, gender: Gender, word: &str, case: Case) -> String {
+    fn last_name(&self, gender: Gender, word: &str, case: Case) -> String {
         String::from(word)
     }
     // TODO
