@@ -6,14 +6,15 @@ use yaml_rust::{Yaml, YamlLoader};
 
 // Initializes, Stores and applies Rules
 struct Petrovich {
-    middlename: Yaml,
     firstname: Yaml,
+    middlename: Yaml,
     lastname: Yaml
 }
 
-impl  Petrovich {
+impl Petrovich {
 
     fn new() -> Petrovich {
+        use yaml_rust::yaml::Hash as YamlHash;
 
         // Open Rules File (Panics on error)
         let mut f = fs::File::open("./src/rules.yml").unwrap();
@@ -21,19 +22,23 @@ impl  Petrovich {
         let mut buffer = String::new();
         f.read_to_string(&mut buffer).unwrap();
         // Pass Buffer to Yaml and unwrap
-        let rules: &Yaml = &YamlLoader::load_from_str(&buffer).unwrap()[0];
+        let rules: &mut Yaml = &mut YamlLoader::load_from_str(&buffer).unwrap()[0];
+        let rules: &mut YamlHash = match *rules {
+            Yaml::Hash(ref mut hash) => hash,
+            _ => panic!("not a hash"),
+        };
 
         // Return Petrovich with preloaded rules
-        Petrovich { 
-            middlename: rules["middlename"],
-            firstname: rules["firstname"],
-            lastname: rules["lastname"]
+        Petrovich {
+            firstname: rules.remove(&Yaml::String("firstname".into())).unwrap(),
+            middlename: rules.remove(&Yaml::String("middlename".into())).unwrap(),
+            lastname: rules.remove(&Yaml::String("lastname".into())).unwrap(),
         }
     }
 
     // TODO
     fn first_name(&self, gender: Gender, word: &str, case: Case) -> String {
-        let ref firstname_rulesets = self.firstname;
+        let ref rulesets = self.firstname;
 
         String::from(word)
 
