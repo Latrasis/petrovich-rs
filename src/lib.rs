@@ -55,20 +55,30 @@ impl Petrovich {
     }
 
     // TODO
-    fn first_name(&self, gender: Gender, word: &str, case: Case) -> String {
-        let ref rulesets = self.firstname;
+    fn first_name(&self, gender: Gender, name: &str, case: Case) -> String {
 
-        String::from(word)
+        // First Let's Check for Exceptions
+        let exceptions = self.firstname["exceptions"].as_vec().unwrap();
+        for exception in exceptions {
+            if exception["test"].as_str().unwrap() == name {
+                println!("{:?}", name);
+            }
+        }
+        // If No Exceptions Matched we Check for Suffixes
 
+        // Once the correct rule is found we apply the rule
 
+        String::from(name)
     }
+
     // TODO
-    fn last_name(&self, gender: Gender, word: &str, case: Case) -> String {
-        String::from(word)
+    fn middle_name(&self, gender: Gender, name: &str, case: Case) -> String {
+        String::from(name)
     }
+
     // TODO
-    fn middle_name(&self, gender: Gender, word: &str, case: Case) -> String {
-        String::from(word)
+    fn last_name(&self, gender: Gender, name: &str, case: Case) -> String {
+        String::from(name)
     }
 }
 
