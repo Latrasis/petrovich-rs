@@ -4,6 +4,24 @@ use std::io::prelude::*;
 use std::fs;
 use yaml_rust::{Yaml, YamlLoader};
 
+// Predefined Genders
+#[derive(PartialEq)]
+enum Gender {
+    Male,
+    Female,
+    Androgyenous,
+}
+
+// Predefined Cases
+#[derive(PartialEq)]
+enum Case {
+    Genitive,
+    Dative,
+    Accusative,
+    Instrumental,
+    Prepositional,
+}
+
 // Initializes, Stores and applies Rules
 struct Petrovich {
     firstname: Yaml,
@@ -54,31 +72,13 @@ impl Petrovich {
     }
 }
 
-// Predefined Genders
-#[derive(PartialEq)]
-enum Gender {
-    Male,
-    Female,
-    Androgyenous,
-}
-
-// Predefined Cases
-#[derive(PartialEq)]
-enum Case {
-    Genitive,
-    Dative,
-    Accusative,
-    Instrumental,
-    Prepositional,
-}
-
 #[test]
 fn should_initialize() {
     let factory = Petrovich::new();
 }
 
 #[test]
-fn should_parse_name() {
+fn should_inflect_first_name() {
     let factory = Petrovich::new();
 
     assert_eq!("Лёша",
