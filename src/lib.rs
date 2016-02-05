@@ -9,7 +9,17 @@ use yaml_rust::{Yaml, YamlLoader};
 enum Gender {
     Male,
     Female,
-    Androgyenous,
+    Androgynous,
+}
+
+impl Gender {
+    fn as_str(&self) -> &str {
+        match *self {
+            Gender::Male => "male",
+            Gender::Female => "female",
+            Gender::Androgynous => "androgynous",
+        }
+    }
 }
 
 // Predefined Cases
@@ -20,6 +30,18 @@ enum Case {
     Accusative,
     Instrumental,
     Prepositional,
+}
+
+impl Case {
+    fn as_str(&self) -> &str {
+        match *self {
+            Case::Genitive => "genitive",
+            Case::Dative => "dative",
+            Case::Accusative => "accusative",
+            Case::Instrumental => "instrumental",
+            Case::Prepositional => "prepositional",
+        }
+    }
 }
 
 // Initializes, Stores and applies Rules
@@ -59,11 +81,17 @@ impl Petrovich {
 
         // First Let's Check for Exceptions
         let exceptions = self.firstname["exceptions"].as_vec().unwrap();
-        for exception in exceptions {
-            if exception["test"].as_str().unwrap() == name {
-                println!("{:?}", name);
-            }
+
+        let exception = exceptions.into_iter().find(|exception| {
+            exception["test"].as_str().unwrap() == name &&
+            exception["gender"].as_str().unwrap() == gender.as_str()
+        });
+
+        // If Exeption Rule is found
+        if let Some(rule) = exception {
+            
         }
+
         // If No Exceptions Matched we Check for Suffixes
 
         // Once the correct rule is found we apply the rule
