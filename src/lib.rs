@@ -119,7 +119,7 @@ fn should_initialize() {
 fn should_inflect_first_name() {
     let factory = Petrovich::new();
 
-    assert_eq!("Лёша",
+    assert_eq!("Лёши",
                factory.first_name(Gender::Male, "Лёша", Case::Genitive));
     assert_eq!("Лёше",
                factory.first_name(Gender::Male, "Лёша", Case::Dative));
@@ -129,5 +129,16 @@ fn should_inflect_first_name() {
                factory.first_name(Gender::Male, "Лёша", Case::Instrumental));
     assert_eq!("Лёше",
                factory.first_name(Gender::Male, "Лёша", Case::Prepositional));
+
+     assert_eq!("Яши",
+               factory.first_name(Gender::Male, "Яша", Case::Genitive));
+    assert_eq!("Яше",
+               factory.first_name(Gender::Male, "Яша", Case::Dative));
+    assert_eq!("Яшу",
+               factory.first_name(Gender::Male, "Яша", Case::Accusative));
+    assert_eq!("Яшей",
+               factory.first_name(Gender::Male, "Яша", Case::Instrumental));
+    assert_eq!("Яше",
+               factory.first_name(Gender::Male, "Яша", Case::Prepositional));
 
 }
