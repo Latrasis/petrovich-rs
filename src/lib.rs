@@ -48,7 +48,7 @@ impl Case {
 struct Petrovich {
     firstname: Yaml,
     middlename: Yaml,
-    lastname: Yaml
+    lastname: Yaml,
 }
 
 impl Petrovich {
@@ -83,12 +83,14 @@ impl Petrovich {
         let exceptions = self.firstname["exceptions"].as_vec().unwrap();
 
         // Search Exceptions with matching of name and gender
-        let exception = exceptions.into_iter().find(|exception| {
+        let exception = exceptions.iter().find(|exception| {
 
             // Check if name matches
-            let match_test = exception["test"].as_vec().unwrap().into_iter().any(|test| {
-                test.as_str().unwrap() == name.to_lowercase()
-            });
+            let match_test = exception["test"]
+                                 .as_vec()
+                                 .unwrap()
+                                 .iter()
+                                 .any(|test| test.as_str().unwrap() == name.to_lowercase());
             // Check if gender matches
             let match_gender = exception["gender"].as_str().unwrap() == gender.as_str();
             // Return true if both match
@@ -97,7 +99,7 @@ impl Petrovich {
 
         // If Exception Rule is found
         if let Some(rule) = exception {
-            
+
             // Apply Rule
 
             // First unwrap to vector Vec<&str>
@@ -107,20 +109,21 @@ impl Petrovich {
             let inflection = inflections[case as usize].as_str().unwrap();
 
             //// Parse Inflection
-            // Count amount of dashes: "-"
-            let postdelete: usize = inflection.rfind("-").map_or(0, |pos| pos+1);
+
+            // Count amount of dashes: "-" thus amount of characters left remaining
+            let remaining: usize = name.chars().count() -
+                                   inflection.rfind("-").map_or(0, |pos| pos + 1);
             // Get Postfix
             let postfix = inflection.trim_left_matches("-");
-
             // Apply Inflection
-            name[..(name.len() - postdelete)].to_string().push_str(postfix)
+            return name.chars().take(remaining).collect::<String>() + postfix;
+        } else {
+            String::from("")
         }
 
         // If No Exceptions Matched we Check for Suffixes
 
         // Once the correct rule is found we apply the rule
-
-        String::from("")
     }
 
     // TODO
@@ -144,17 +147,17 @@ fn should_inflect_first_name() {
     let factory = Petrovich::new();
 
     // // Лёша
-    // assert_eq!("Лёши",
-    //            factory.first_name(Gender::Male, "Лёша", Case::Genitive));
-    // assert_eq!("Лёше",
-    //            factory.first_name(Gender::Male, "Лёша", Case::Dative));
-    // assert_eq!("Лёшу",
-    //            factory.first_name(Gender::Male, "Лёша", Case::Accusative));
-    // assert_eq!("Лёшой",
-    //            factory.first_name(Gender::Male, "Лёша", Case::Instrumental));
-    // assert_eq!("Лёше",
-    //            factory.first_name(Gender::Male, "Лёша", Case::Prepositional));
-    
+    assert_eq!("Лёши",
+               factory.first_name(Gender::Male, "Лёша", Case::Genitive));
+    assert_eq!("Лёше",
+               factory.first_name(Gender::Male, "Лёша", Case::Dative));
+    assert_eq!("Лёшу",
+               factory.first_name(Gender::Male, "Лёша", Case::Accusative));
+    assert_eq!("Лёшой",
+               factory.first_name(Gender::Male, "Лёша", Case::Instrumental));
+    assert_eq!("Лёше",
+               factory.first_name(Gender::Male, "Лёша", Case::Prepositional));
+
     assert_eq!("Яши",
                factory.first_name(Gender::Male, "Яша", Case::Genitive));
     assert_eq!("Яше",
