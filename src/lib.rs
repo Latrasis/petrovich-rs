@@ -76,6 +76,24 @@ impl Petrovich {
         }
     }
 
+    fn inflect(name: &str, rule: &Yaml, case: Case) -> String {
+
+        // First unwrap to vector Vec<&str>
+        let inflections = rule["mods"].as_vec().unwrap();
+
+        // Get inflection by Case
+        let inflection = inflections[case as usize].as_str().unwrap();
+
+        // Count amount of dashes: "-" thus amount of characters left remaining
+        let remaining: usize = name.chars().count() -
+                               inflection.rfind("-").map_or(0, |pos| pos + 1);
+        // Get Postfix
+        let postfix = inflection.trim_left_matches("-");
+
+        // Apply Inflection
+        return name.chars().take(remaining).collect::<String>() + postfix;
+    }
+
     // TODO
     fn first_name(&self, gender: Gender, name: &str, case: Case) -> String {
 
@@ -99,29 +117,52 @@ impl Petrovich {
 
         // If Exception Rule is found
         if let Some(rule) = exception {
-
             // Apply Rule
-
-            // First unwrap to vector Vec<&str>
-            let inflections = rule["mods"].as_vec().unwrap();
-
-            // Get inflection by Case
-            let inflection = inflections[case as usize].as_str().unwrap();
-
-            //// Parse Inflection
-
-            // Count amount of dashes: "-" thus amount of characters left remaining
-            let remaining: usize = name.chars().count() -
-                                   inflection.rfind("-").map_or(0, |pos| pos + 1);
-            // Get Postfix
-            let postfix = inflection.trim_left_matches("-");
-            // Apply Inflection
-            return name.chars().take(remaining).collect::<String>() + postfix;
-        } else {
-            String::from("")
+            return Petrovich::inflect(name, rule, case);
         }
 
         // If No Exceptions Matched we Check for Suffixes
+        let suffixes = self.firstname["suffixes"].as_vec().unwrap();
+
+        let suffix = suffixes
+                        .iter()
+                        .filter(|suffix| {
+                            // Check if suffix matches
+                            let match_test = suffix["test"]
+                                                .as_vec()
+                                                .unwrap()
+                                                .iter()
+                                                .any(|test| name.to_lowercase().ends_with(test.as_str().unwrap()));
+
+                            // Check if gender matches
+                            let match_gender = suffix["gender"].as_str().unwrap() == gender.as_str();
+
+                            // Return true if both match
+                            match_gender && match_test
+                        })
+                        .max_by_key(|list| {
+
+                            // Find Longest Matching 
+                            list["test"]
+                                .as_vec()
+                                .unwrap()
+                                .iter()
+                                .filter(|test| name.to_lowercase().ends_with(test.as_str().unwrap()))
+                                .max_by_key(|test| test.as_str().unwrap().len())
+                                .unwrap().as_str().unwrap().len()
+
+                        });
+
+            // If Suffix Rule is found
+            if let Some(rule) = suffix {
+                // Apply Rule
+                return Petrovich::inflect(name, rule, case);
+            } else {
+                String::new()
+            }
+        
+
+
 
         // Once the correct rule is found we apply the rule
     }
