@@ -128,20 +128,20 @@ impl Petrovich {
                         .iter()
                         .filter(|suffix| {
                             // Check if suffix matches
-                            let match_test = suffix["test"]
+                            let does_match_test = suffix["test"]
                                                 .as_vec()
                                                 .unwrap()
                                                 .iter()
                                                 .any(|test| name.to_lowercase().ends_with(test.as_str().unwrap()));
 
                             // Check if gender matches
-                            let match_gender = suffix["gender"].as_str().unwrap() == gender.as_str();
+                            let suffix_gender = suffix["gender"].as_str().unwrap();
+                            let does_match_gender = suffix_gender == gender.as_str() || suffix_gender == "androgynous";
 
                             // Return true if both match
-                            match_gender && match_test
+                            does_match_test && does_match_gender
                         })
                         .max_by_key(|list| {
-
                             // Find Longest Matching 
                             list["test"]
                                 .as_vec()
@@ -160,11 +160,6 @@ impl Petrovich {
             } else {
                 String::new()
             }
-        
-
-
-
-        // Once the correct rule is found we apply the rule
     }
 
     // TODO
@@ -188,7 +183,7 @@ fn should_inflect_first_name() {
     let factory = Petrovich::new();
 
     // // Лёша
-    assert_eq!("Лёши",
+    assert_eq!("Лёшы",
                factory.first_name(Gender::Male, "Лёша", Case::Genitive));
     assert_eq!("Лёше",
                factory.first_name(Gender::Male, "Лёша", Case::Dative));
