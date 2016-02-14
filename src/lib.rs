@@ -171,7 +171,15 @@ impl Petrovich {
 
     // TODO
     fn last_name(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
-        Ok(String::from(""))
+        
+        // First Let's Check for Exceptions
+        find_exception(&self.lastname["exceptions"], name, gender)
+        // Then Check for Suffixes
+        .or(find_suffix(&self.lastname["suffixes"], name, gender))
+            // If no matching found return error
+            .ok_or("No Matching Rule Found")
+            // Then Inflect Name using matched rule
+            .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
 }
 
@@ -184,7 +192,6 @@ fn should_initialize() {
 fn should_inflect_first_name() {
     let inflect = Petrovich::new();
 
-    // // Лёша
     assert_eq!("Лёшы",
                inflect.first_name(Gender::Male, "Лёша", Case::Genitive).unwrap());
     assert_eq!("Лёше",
@@ -213,7 +220,6 @@ fn should_inflect_first_name() {
 fn should_inflect_last_name() {
     let inflect = Petrovich::new();
 
-    // // Лёша
     assert_eq!("Петрова",
                inflect.last_name(Gender::Male, "Петров", Case::Genitive).unwrap());
     assert_eq!("Петрову",
