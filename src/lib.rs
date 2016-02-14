@@ -165,46 +165,75 @@ impl Petrovich {
     }
 
     // TODO
-    fn middle_name(&self, gender: Gender, name: &str, case: Case) -> String {
-        String::from("")
+    fn middle_name(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
+        Ok(String::from(""))
     }
 
     // TODO
-    fn last_name(&self, gender: Gender, name: &str, case: Case) -> String {
-        String::from("")
+    fn last_name(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
+        Ok(String::from(""))
     }
 }
 
 #[test]
 fn should_initialize() {
-    let factory = Petrovich::new();
+    let inflect = Petrovich::new();
 }
 
 #[test]
 fn should_inflect_first_name() {
-    let factory = Petrovich::new();
+    let inflect = Petrovich::new();
 
     // // Лёша
     assert_eq!("Лёшы",
-               factory.first_name(Gender::Male, "Лёша", Case::Genitive).unwrap());
+               inflect.first_name(Gender::Male, "Лёша", Case::Genitive).unwrap());
     assert_eq!("Лёше",
-               factory.first_name(Gender::Male, "Лёша", Case::Dative).unwrap());
+               inflect.first_name(Gender::Male, "Лёша", Case::Dative).unwrap());
     assert_eq!("Лёшу",
-               factory.first_name(Gender::Male, "Лёша", Case::Accusative).unwrap());
+               inflect.first_name(Gender::Male, "Лёша", Case::Accusative).unwrap());
     assert_eq!("Лёшой",
-               factory.first_name(Gender::Male, "Лёша", Case::Instrumental).unwrap());
+               inflect.first_name(Gender::Male, "Лёша", Case::Instrumental).unwrap());
     assert_eq!("Лёше",
-               factory.first_name(Gender::Male, "Лёша", Case::Prepositional).unwrap());
+               inflect.first_name(Gender::Male, "Лёша", Case::Prepositional).unwrap());
 
     assert_eq!("Яши",
-               factory.first_name(Gender::Male, "Яша", Case::Genitive).unwrap());
+               inflect.first_name(Gender::Male, "Яша", Case::Genitive).unwrap());
     assert_eq!("Яше",
-               factory.first_name(Gender::Male, "Яша", Case::Dative).unwrap());
+               inflect.first_name(Gender::Male, "Яша", Case::Dative).unwrap());
     assert_eq!("Яшу",
-               factory.first_name(Gender::Male, "Яша", Case::Accusative).unwrap());
+               inflect.first_name(Gender::Male, "Яша", Case::Accusative).unwrap());
     assert_eq!("Яшей",
-               factory.first_name(Gender::Male, "Яша", Case::Instrumental).unwrap());
+               inflect.first_name(Gender::Male, "Яша", Case::Instrumental).unwrap());
     assert_eq!("Яше",
-               factory.first_name(Gender::Male, "Яша", Case::Prepositional).unwrap());
+               inflect.first_name(Gender::Male, "Яша", Case::Prepositional).unwrap());
+
+}
+
+#[test]
+fn should_inflect_last_name() {
+    let inflect = Petrovich::new();
+
+    // // Лёша
+    assert_eq!("Петрова",
+               inflect.last_name(Gender::Male, "Петров", Case::Genitive).unwrap());
+    assert_eq!("Петрову",
+               inflect.last_name(Gender::Male, "Петров", Case::Dative).unwrap());
+    assert_eq!("Петрова",
+               inflect.last_name(Gender::Male, "Петров", Case::Accusative).unwrap());
+    assert_eq!("Петровым",
+               inflect.last_name(Gender::Male, "Петров", Case::Instrumental).unwrap());
+    assert_eq!("Петрову",
+               inflect.last_name(Gender::Male, "Петров", Case::Prepositional).unwrap());
+
+    assert_eq!("Константинa",
+               inflect.last_name(Gender::Male, "Константинов", Case::Genitive).unwrap());
+    assert_eq!("Константину",
+               inflect.last_name(Gender::Male, "Константинов", Case::Dative).unwrap());
+    assert_eq!("Константина",
+               inflect.last_name(Gender::Male, "Константинов", Case::Accusative).unwrap());
+    assert_eq!("Константиным",
+               inflect.last_name(Gender::Male, "Константинов", Case::Instrumental).unwrap());
+    assert_eq!("Константину",
+               inflect.last_name(Gender::Male, "Константинов", Case::Prepositional).unwrap());
 
 }
