@@ -2,6 +2,7 @@
 name = "petrovich"
 version = "0.1.0"
 authors = ["latrasis <jacobapayne@gmail.com>","road21 <amtroitskiy@gmail.com>"]
+description = "Petrovich is library which inflects Russian names to given grammatical case. It supports first names, last names and middle names inflections."
 
 [dependencies]
 yaml-rust = "0.3.0"
