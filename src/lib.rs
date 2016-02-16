@@ -196,6 +196,18 @@ impl Petrovich {
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
+
+    pub fn detect_gender(middlename: &str) -> Gender {
+        if middlename.ends_with("ич") || middlename.ends_with("ыч") {
+            return Gender::Male;
+        }
+
+        if middlename.ends_with("на") {
+            return Gender::Female;
+        }
+
+        return Gender::Androgynous;
+    }
 }
 
 #[test]
@@ -315,4 +327,14 @@ fn should_inflect_complex_female_lastnames() {
         subject.lastname(Gender::Female ,"Забейворота", Case::Dative).unwrap());
     assert_eq!("Окуджаве", 
         subject.lastname(Gender::Female ,"Окуджава", Case::Dative).unwrap());
+}
+
+#[test]
+fn should_detect_gender() {
+    let subject = Petrovich::new();
+    
+    assert_eq!(Petrovich::detect_gender("Сергеевич").as_str(), Gender::Male.as_str());
+    assert_eq!(Petrovich::detect_gender("Степаныч").as_str(), Gender::Male.as_str());
+    assert_eq!(Petrovich::detect_gender("Петровна").as_str(), Gender::Female.as_str());
+    assert_eq!(Petrovich::detect_gender("Оно").as_str(), Gender::Androgynous.as_str());
 }
