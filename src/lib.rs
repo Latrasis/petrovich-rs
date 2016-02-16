@@ -168,7 +168,7 @@ impl Petrovich {
         // Then Check for Suffixes
         .or(find_suffix(&self.firstname["suffixes"], name, gender))
             // If no matching found return error
-            .ok_or("No Matching Rule Found")
+            .ok_or("No Matching Firstname Rule Found")
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
@@ -176,11 +176,11 @@ impl Petrovich {
     pub fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
         
         // First Let's Check for Exceptions
-        find_exception(&self.firstname["exceptions"], name, gender)
+        find_exception(&self.middlename["exceptions"], name, gender)
         // Then Check for Suffixes
-        .or(find_suffix(&self.firstname["suffixes"], name, gender))
+        .or(find_suffix(&self.middlename["suffixes"], name, gender))
             // If no matching found return error
-            .ok_or("No Matching Rule Found")
+            .ok_or("No Matching Middlename Rule Found")
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
@@ -192,7 +192,7 @@ impl Petrovich {
         // Then Check for Suffixes
         .or(find_suffix(&self.lastname["suffixes"], name, gender))
             // If no matching found return error
-            .ok_or("No Matching Rule Found")
+            .ok_or("No Matching Lastname Rule Found")
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
