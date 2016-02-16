@@ -176,7 +176,15 @@ impl Petrovich {
 
     // TODO
     fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
-        Ok(String::from(""))
+        
+        // First Let's Check for Exceptions
+        find_exception(&self.firstname["exceptions"], name, gender)
+        // Then Check for Suffixes
+        .or(find_suffix(&self.firstname["suffixes"], name, gender))
+            // If no matching found return error
+            .ok_or("No Matching Rule Found")
+            // Then Inflect Name using matched rule
+            .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
 
     // TODO
@@ -202,6 +210,9 @@ fn should_initialize() {
 fn should_error() {
     let subject = Petrovich::new();
     assert!(subject.firstname(Gender::Male, "Blabla", Case::Genitive).is_err());
+    assert!(subject.middlename(Gender::Male, "Blabla", Case::Genitive).is_err());
+    assert!(subject.lastname(Gender::Male, "Blabla", Case::Genitive).is_err());
+
 }
 
 #[test]
