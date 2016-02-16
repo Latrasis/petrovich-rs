@@ -6,7 +6,7 @@ use yaml_rust::{Yaml, YamlLoader};
 
 // Возможные Полы
 #[derive(PartialEq, Clone, Copy)]
-enum Gender {
+pub enum Gender {
     // Мужской
     Male,
     // Женский
@@ -16,7 +16,7 @@ enum Gender {
 }
 
 impl Gender {
-    fn as_str(&self) -> &str {
+    pub fn as_str(&self) -> &str {
         match *self {
             Gender::Male => "male",
             Gender::Female => "female",
@@ -27,7 +27,7 @@ impl Gender {
 
 // Возможные Падежи
 #[derive(PartialEq)]
-enum Case {
+pub enum Case {
     // Родительный  | Кого? Чего?
     Genitive, 
     // Дательный    | Кому? Чему?
@@ -41,7 +41,7 @@ enum Case {
 }
 
 impl Case {
-    fn as_str(&self) -> &str {
+    pub fn as_str(&self) -> &str {
         match *self {
             Case::Genitive => "genitive",
             Case::Dative => "dative",
@@ -112,7 +112,7 @@ fn find_suffix<'exc>(suffixes: &'exc Yaml, name: &str, gender: Gender) -> Option
 }
 
 // Initializes, Stores and applies Rules
-struct Petrovich {
+pub struct Petrovich {
     firstname: Yaml,
     middlename: Yaml,
     lastname: Yaml,
@@ -120,7 +120,7 @@ struct Petrovich {
 
 impl Petrovich {
 
-    fn new() -> Petrovich {
+    pub fn new() -> Petrovich {
         use yaml_rust::yaml::Hash as YamlHash;
 
         // Open Rules File (Panics on error)
@@ -161,8 +161,7 @@ impl Petrovich {
         return name.chars().take(remaining).collect::<String>() + postfix;
     }
 
-    // TODO
-    fn firstname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
+    pub fn firstname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
 
         // First Let's Check for Exceptions
         find_exception(&self.firstname["exceptions"], name, gender)
@@ -174,8 +173,7 @@ impl Petrovich {
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
 
-    // TODO
-    fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
+    pub fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
         
         // First Let's Check for Exceptions
         find_exception(&self.firstname["exceptions"], name, gender)
@@ -187,8 +185,7 @@ impl Petrovich {
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
 
-    // TODO
-    fn lastname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
+    pub fn lastname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
         
         // First Let's Check for Exceptions
         find_exception(&self.lastname["exceptions"], name, gender)
@@ -212,7 +209,6 @@ fn should_error() {
     assert!(subject.firstname(Gender::Male, "Blabla", Case::Genitive).is_err());
     assert!(subject.middlename(Gender::Male, "Blabla", Case::Genitive).is_err());
     assert!(subject.lastname(Gender::Male, "Blabla", Case::Genitive).is_err());
-
 }
 
 #[test]
