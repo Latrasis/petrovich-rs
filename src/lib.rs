@@ -1,17 +1,50 @@
+//!
+//! Petrovich is inflects Russian names to given grammatical case. 
+//! It supports first names, last names and middle names inflections.
+//!
+//! # Usage
+//!
+//! This crate is [on crates.io](https://crates.io/crates/petrovich) and can be
+//! used by adding `petrovich` to the dependencies in your project's `Cargo.toml`.
+//!
+//! ```toml
+//! [dependencies]
+//!
+//! petrovich = "0.1"
+//! ```
+//!
+//! and this to your crate root:
+//!
+//! ```rust
+//! extern crate petrovich;
+//! ```
+//!
+//! # Examples
+//!
+//! ```
+//! extern crate petrovich;
+//!
+//!
+//! fn main() {
+//!     let subject = petrovich::Petrovich::new();
+//!     subject.firstname(Gender::Male, "Саша", Case::Dative).unwrap(); // Саше
+//! }
+//! ```
+
 extern crate yaml_rust;
 
 use std::io::prelude::*;
 use std::fs;
 use yaml_rust::{Yaml, YamlLoader};
 
-// Возможные Полы
+/// Возможные Полы
 #[derive(PartialEq, Clone, Copy)]
 pub enum Gender {
-    // Мужской
+    /// Мужской Пол
     Male,
-    // Женский
+    /// Женский Пол
     Female,
-    // Средний
+    /// Средний Пол
     Androgynous,
 }
 
@@ -25,18 +58,18 @@ impl Gender {
     }
 }
 
-// Возможные Падежи
+/// Возможные Падежи
 #[derive(PartialEq)]
 pub enum Case {
-    // Родительный  | Кого? Чего?
+    /// Родительный  | _Кого? Чего?_
     Genitive, 
-    // Дательный    | Кому? Чему?
+    /// Дательный    | _Кому? Чему?_
     Dative, 
-    // Винительный  | Кого? Что?
+    /// Винительный  | _Кого? Что?_
     Accusative, 
-    // Творительный | Кем? Чем?
+    /// Творительный | _Кем? Чем?_
     Instrumental, 
-    // Предложный   | О ком? О чём?
+    /// Предложный   | _О ком? О чём?_
     Prepositional, 
 }
 
@@ -111,7 +144,7 @@ fn find_suffix<'exc>(suffixes: &'exc Yaml, name: &str, gender: Gender) -> Option
         })
 }
 
-// Initializes, Stores and applies Rules
+/// Initializes, Stores and applies Rules
 pub struct Petrovich {
     firstname: Yaml,
     middlename: Yaml,
@@ -119,7 +152,17 @@ pub struct Petrovich {
 }
 
 impl Petrovich {
-
+    /// Ru: Создавания нового Петровича
+    /// En: Create a new inflector instance
+    ///
+    /// # Examples:
+    ///  
+    ///  Simple inflection:
+    ///
+    /// ```
+    /// let subject = Petrovich::new();
+    /// ```
+    ///
     pub fn new() -> Petrovich {
         use yaml_rust::yaml::Hash as YamlHash;
 
