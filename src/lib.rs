@@ -195,7 +195,8 @@ impl Petrovich {
         let remaining: usize = name.chars().count() -
                                inflection.rfind("-").map_or(0, |pos| pos + 1);
         // Get Postfix
-        let postfix = inflection.trim_left_matches("-");
+        let matches : &[_] = &['-', '.'];
+        let postfix = inflection.trim_left_matches(matches);
 
         // Apply Inflection
         return name.chars().take(remaining).collect::<String>() + postfix;
