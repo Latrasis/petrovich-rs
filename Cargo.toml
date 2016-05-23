@@ -1,6 +1,6 @@
 [package]
 name = "petrovich"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["latrasis <jacobapayne@gmail.com>","road21 <amtroitskiy@gmail.com>"]
 description = "Petrovich is library which inflects Russian names to given grammatical case. It supports first names, last names and middle names inflections."
 license = "MIT"
