@@ -1,5 +1,5 @@
 //!
-//! Petrovich is inflects Russian names to given grammatical case. 
+//! Petrovich is inflects Russian names to given grammatical case.
 //! It supports first names, last names and middle names inflections.
 //!
 //! # Usage
@@ -62,15 +62,15 @@ impl Gender {
 #[derive(PartialEq)]
 pub enum Case {
     /// Родительный  | _Кого? Чего?_
-    Genitive, 
+    Genitive,
     /// Дательный    | _Кому? Чему?_
-    Dative, 
+    Dative,
     /// Винительный  | _Кого? Что?_
-    Accusative, 
+    Accusative,
     /// Творительный | _Кем? Чем?_
-    Instrumental, 
+    Instrumental,
     /// Предложный   | _О ком? О чём?_
-    Prepositional, 
+    Prepositional,
 }
 
 impl Case {
@@ -88,11 +88,8 @@ impl Case {
 // Find Exception by name and gender
 fn find_exception<'exc>(exceptions: &'exc Yaml, name: &str, gender: Gender) -> Option<&'exc Yaml> {
 
-    // First Let's Check for Exceptions
-    let exceptions = exceptions.as_vec().unwrap();
-
     // Search Exceptions with matching of name and gender
-    exceptions.iter().find(|exception| {
+    exceptions.as_vec().and_then(|list| list.iter().find(|exception| {
 
         // Check if name matches
         let does_match_test = exception["test"]
@@ -106,7 +103,7 @@ fn find_exception<'exc>(exceptions: &'exc Yaml, name: &str, gender: Gender) -> O
 
         // Return true if both match
         does_match_test && does_match_gender
-    })
+    }))
 }
 
 // Find Suffix by name and gender
@@ -132,7 +129,7 @@ fn find_suffix<'exc>(suffixes: &'exc Yaml, name: &str, gender: Gender) -> Option
             does_match_test && does_match_gender
         })
         .max_by_key(|list| {
-            // Find Longest Matching 
+            // Find Longest Matching
             list["test"]
                 .as_vec()
                 .unwrap()
@@ -156,7 +153,7 @@ impl Petrovich {
     /// En: Create a new inflector instance
     ///
     /// # Examples:
-    ///  
+    ///
     ///  Simple inflection:
     ///
     /// ```
@@ -217,7 +214,7 @@ impl Petrovich {
     }
 
     pub fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
-        
+
         // First Let's Check for Exceptions
         find_exception(&self.middlename["exceptions"], name, gender)
         // Then Check for Suffixes
@@ -229,7 +226,7 @@ impl Petrovich {
     }
 
     pub fn lastname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
-        
+
         // First Let's Check for Exceptions
         find_exception(&self.lastname["exceptions"], name, gender)
         // Then Check for Suffixes
@@ -297,39 +294,39 @@ fn should_inflect_first_names() {
 fn should_inflect_complex_male_lastnames() {
     let subject = Petrovich::new();
 
-    assert_eq!("Бильжо", 
+    assert_eq!("Бильжо",
         subject.lastname(Gender::Male, "Бильжо", Case::Dative).unwrap());
-    assert_eq!("Ничипоруку", 
+    assert_eq!("Ничипоруку",
         subject.lastname(Gender::Male, "Ничипорук", Case::Dative).unwrap());
-    assert_eq!("Щусю", 
+    assert_eq!("Щусю",
         subject.lastname(Gender::Male, "Щусь", Case::Dative).unwrap());
-    assert_eq!("Фидре", 
+    assert_eq!("Фидре",
         subject.lastname(Gender::Male, "Фидря", Case::Dative).unwrap());
-    assert_eq!("Белоконю", 
+    assert_eq!("Белоконю",
         subject.lastname(Gender::Male, "Белоконь", Case::Dative).unwrap());
-    assert_eq!("Добробабе", 
+    assert_eq!("Добробабе",
         subject.lastname(Gender::Male, "Добробаба", Case::Dative).unwrap());
-    assert_eq!("Исайченко", 
+    assert_eq!("Исайченко",
         subject.lastname(Gender::Male, "Исайченко", Case::Dative).unwrap());
-    assert_eq!("Бондаришину", 
+    assert_eq!("Бондаришину",
         subject.lastname(Gender::Male, "Бондаришин", Case::Dative).unwrap());
-    assert_eq!("Дубинке", 
+    assert_eq!("Дубинке",
         subject.lastname(Gender::Male, "Дубинка", Case::Dative).unwrap());
-    assert_eq!("Сироте", 
+    assert_eq!("Сироте",
         subject.lastname(Gender::Male, "Сирота", Case::Dative).unwrap());
-    assert_eq!("Воеводе", 
+    assert_eq!("Воеводе",
         subject.lastname(Gender::Male, "Воевода", Case::Dative).unwrap());
-    assert_eq!("Воложу", 
+    assert_eq!("Воложу",
         subject.lastname(Gender::Male, "Волож", Case::Dative).unwrap());
-    assert_eq!("Кравцу", 
+    assert_eq!("Кравцу",
         subject.lastname(Gender::Male, "Кравец", Case::Dative).unwrap());
-    assert_eq!("Самотечнему", 
+    assert_eq!("Самотечнему",
         subject.lastname(Gender::Male, "Самотечний", Case::Dative).unwrap());
-    assert_eq!("Цою", 
+    assert_eq!("Цою",
         subject.lastname(Gender::Male, "Цой", Case::Dative).unwrap());
-    assert_eq!("Шопену", 
+    assert_eq!("Шопену",
         subject.lastname(Gender::Male, "Шопен", Case::Dative).unwrap());
-    assert_eq!("Сосковцу", 
+    assert_eq!("Сосковцу",
         subject.lastname(Gender::Male, "Сосковец", Case::Dative).unwrap());
 
 }
@@ -338,44 +335,44 @@ fn should_inflect_complex_male_lastnames() {
 fn should_inflect_complex_female_lastnames() {
     let subject = Petrovich::new();
 
-    assert_eq!("Бильжо", 
+    assert_eq!("Бильжо",
         subject.lastname(Gender::Female ,"Бильжо", Case::Dative).unwrap());
-    assert_eq!("Ничипорук", 
+    assert_eq!("Ничипорук",
         subject.lastname(Gender::Female ,"Ничипорук", Case::Dative).unwrap());
-    assert_eq!("Щусь", 
+    assert_eq!("Щусь",
         subject.lastname(Gender::Female ,"Щусь", Case::Dative).unwrap());
-    assert_eq!("Фидре", 
+    assert_eq!("Фидре",
         subject.lastname(Gender::Female ,"Фидря", Case::Dative).unwrap());
-    assert_eq!("Белоконь", 
+    assert_eq!("Белоконь",
         subject.lastname(Gender::Female ,"Белоконь", Case::Dative).unwrap());
-    assert_eq!("Добробабе", 
+    assert_eq!("Добробабе",
         subject.lastname(Gender::Female ,"Добробаба", Case::Dative).unwrap());
-    assert_eq!("Исайченко", 
+    assert_eq!("Исайченко",
         subject.lastname(Gender::Female ,"Исайченко", Case::Dative).unwrap());
-    assert_eq!("Бондаришин", 
+    assert_eq!("Бондаришин",
         subject.lastname(Gender::Female ,"Бондаришин", Case::Dative).unwrap());
-    assert_eq!("Дубинке", 
+    assert_eq!("Дубинке",
         subject.lastname(Gender::Female ,"Дубинка", Case::Dative).unwrap());
-    assert_eq!("Сироте", 
+    assert_eq!("Сироте",
         subject.lastname(Gender::Female ,"Сирота", Case::Dative).unwrap());
-    assert_eq!("Воеводе", 
+    assert_eq!("Воеводе",
         subject.lastname(Gender::Female ,"Воевода", Case::Dative).unwrap());
-    assert_eq!("Гулыге", 
+    assert_eq!("Гулыге",
         subject.lastname(Gender::Female ,"Гулыга", Case::Dative).unwrap());
-    assert_eq!("Дейнеке", 
+    assert_eq!("Дейнеке",
         subject.lastname(Gender::Female ,"Дейнека", Case::Dative).unwrap());
-    assert_eq!("Джанджагава", 
+    assert_eq!("Джанджагава",
         subject.lastname(Gender::Female ,"Джанджагава", Case::Dative).unwrap());
-    assert_eq!("Забейворота", 
+    assert_eq!("Забейворота",
         subject.lastname(Gender::Female ,"Забейворота", Case::Dative).unwrap());
-    assert_eq!("Окуджаве", 
+    assert_eq!("Окуджаве",
         subject.lastname(Gender::Female ,"Окуджава", Case::Dative).unwrap());
 }
 
 #[test]
 fn should_detect_gender() {
     let subject = Petrovich::new();
-    
+
     assert_eq!(Petrovich::detect_gender("Сергеевич").as_str(), Gender::Male.as_str());
     assert_eq!(Petrovich::detect_gender("Степаныч").as_str(), Gender::Male.as_str());
     assert_eq!(Petrovich::detect_gender("Петровна").as_str(), Gender::Female.as_str());
