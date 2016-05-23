@@ -24,9 +24,10 @@
 //! ```
 //! extern crate petrovich;
 //!
+//! use petrovich::*;
 //!
 //! fn main() {
-//!     let subject = petrovich::Petrovich::new();
+//!     let subject = Petrovich::new();
 //!     subject.firstname(Gender::Male, "Саша", Case::Dative).unwrap(); // Саше
 //! }
 //! ```
@@ -151,15 +152,6 @@ pub struct Petrovich {
 impl Petrovich {
     /// Ru: Создавания нового Петровича
     /// En: Create a new inflector instance
-    ///
-    /// # Examples:
-    ///
-    ///  Simple inflection:
-    ///
-    /// ```
-    /// let subject = Petrovich::new();
-    /// ```
-    ///
     pub fn new() -> Petrovich {
         use yaml_rust::yaml::Hash as YamlHash;
 
@@ -201,7 +193,7 @@ impl Petrovich {
         // Apply Inflection
         return name.chars().take(remaining).collect::<String>() + postfix;
     }
-
+    /// Inflects firstname
     pub fn firstname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
 
         // First Let's Check for Exceptions
@@ -213,7 +205,7 @@ impl Petrovich {
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
-
+    /// Inflects middlename
     pub fn middlename(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
 
         // First Let's Check for Exceptions
@@ -225,7 +217,7 @@ impl Petrovich {
             // Then Inflect Name using matched rule
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
-
+    /// Inflects lastname
     pub fn lastname(&self, gender: Gender, name: &str, case: Case) -> Result<String, &str> {
 
         // First Let's Check for Exceptions
@@ -238,6 +230,7 @@ impl Petrovich {
             .and_then(|rule| Ok(Petrovich::inflect(name, rule, case)))
     }
 
+    /// Detects gender of a middlename, fallbacks to Gender::Androgynous
     pub fn detect_gender(middlename: &str) -> Gender {
         if middlename.ends_with("ич") || middlename.ends_with("ыч") {
             return Gender::Male;
